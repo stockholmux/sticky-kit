@@ -30,7 +30,7 @@
       sticky_class = "is_stuck";
     }
     _fn = function(elm, padding_bottom, parent_top, parent_height, top, height) {
-      var bottomed, fixed, float, last_pos, offset, parent, recalc, reset_width, spacer, tick;
+      var bottomed, destroy, fixed, float, last_pos, offset, parent, recalc, reset_width, spacer, tick;
       parent = elm.parent();
       if (parent_selector != null) {
         parent = parent.closest(parent_selector);
@@ -151,6 +151,21 @@
           }
         }
       };
+      destroy = function() {
+        win.off("scroll", tick);
+        elm.css({
+          position: "static",
+          bottom: "",
+          top: "",
+          width: "auto"
+        }).removeClass(sticky_class);
+        return spacer.detach();
+      };
+      elm.data("stickyKit", {
+        tick: tick,
+        recalc: recalc,
+        destroy: destroy
+      });
       win.on("scroll", tick);
       setTimeout(tick, 0);
       return $(document.body).on("sticky_kit:recalc", function() {

@@ -141,7 +141,22 @@ $.fn.stick_in_parent = (opts={}) ->
               bottom: padding_bottom
               top: ""
             }).trigger("sticky_kit:bottom")
-
+      destroy = ->
+        win.off "scroll", tick
+        elm.css(
+          position: "static"
+          bottom: ""
+          top: ""
+          width: "auto"
+        ).removeClass sticky_class
+        spacer.detach()
+      
+      
+      # Add the data
+      elm.data "stickyKit",
+        tick: tick
+        recalc: recalc
+        destroy: destroy
       win.on "scroll", tick
       setTimeout tick, 0
       $(document.body).on "sticky_kit:recalc", ->
